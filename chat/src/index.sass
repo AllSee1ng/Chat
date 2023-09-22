@@ -1,6 +1,30 @@
-body
+
+*
   margin: 0
   padding: 0
   box-sizing: border-box
-  outline: none
   font-family: sans-serif
+  outline: none
+
+.App
+  position: relative
+  min-height: 100vh
+
+.messageForm
+  position: absolute
+  bottom: 0
+  width: 100%
+  height: 70px
+  border-top: 1px solid #000
+  display: grid
+  grid-template-columns: 3fr 1fr
+
+.messageInput
+  padding: 0 20px
+  border: none
+  height: 100%
+
+.messageSubmit
+  border: none
+  border-left: 1px solid #000
+  background: transparent

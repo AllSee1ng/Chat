@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 export default function MessageForm({ setMessageList, messageList }) {
   const [value, setValue] = useState("");
 
   // Рендер сообщения от бота
   useEffect(() => {
+    inputRef.current?.focus();
     if (
       messageList[messageList.length - 1] &&
       messageList[messageList.length - 1].author !== "Mr.Robot"
@@ -22,7 +23,7 @@ export default function MessageForm({ setMessageList, messageList }) {
         clearInterval(robotMessage);
       };
     }
-  });
+  }, [messageList]);
 
   // Отслеживание изменения в инпуте
   const handleMessageChange = (e) => {
@@ -42,6 +43,8 @@ export default function MessageForm({ setMessageList, messageList }) {
     setValue("");
   };
 
+  const inputRef = useRef();
+
   return (
     <form className="messageForm" onSubmit={updateMessageList}>
       <input
@@ -50,6 +53,7 @@ export default function MessageForm({ setMessageList, messageList }) {
         placeholder="Начните писать..."
         value={value}
         onChange={handleMessageChange}
+        ref={inputRef}
       />
       <input type="submit" className="messageSubmit" />
     </form>

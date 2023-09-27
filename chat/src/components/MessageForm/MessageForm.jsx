@@ -1,29 +1,38 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
 
 export default function MessageForm({ setMessageList, messageList }) {
+  const { chatId } = useParams();
   const [value, setValue] = useState("");
+  const inputRef = useRef();
 
+  const handleSetMessageList = useCallback(() => {
+    setMessageList((prevMessageList) => ({
+      ...prevMessageList,
+      [chatId]: [...prevMessageList[chatId], { text: value, author: "User" }],
+    }));
+  }, [setMessageList, value]);
   // Рендер сообщения от бота
   useEffect(() => {
-    inputRef.current?.focus();
+    inputRef.current.focus();
     if (
-      messageList[messageList.length - 1] &&
+      messageList.length &&
       messageList[messageList.length - 1].author !== "Mr.Robot"
     ) {
       const robotMessage = setTimeout(() => {
-        setMessageList([
-          ...messageList,
-          {
-            text: "Hello Friend",
-            author: "Mr.Robot",
-          },
-        ]);
+        setMessageList((prevMessageList) => ({
+          ...prevMessageList,
+          [chatId]: [
+            ...prevMessageList[chatId],
+            { text: "hello friend", author: "Mr.Robot" },
+          ],
+        }));
       }, 1500);
       return () => {
         clearInterval(robotMessage);
       };
     }
-  }, [messageList]);
+  });
 
   // Отслеживание изменения в инпуте
   const handleMessageChange = (e) => {
@@ -33,17 +42,9 @@ export default function MessageForm({ setMessageList, messageList }) {
   // Обновление списка сообщений
   const updateMessageList = (e) => {
     e.preventDefault();
-    setMessageList([
-      ...messageList,
-      {
-        text: value,
-        author: "User",
-      },
-    ]);
+    handleSetMessageList();
     setValue("");
   };
-
-  const inputRef = useRef();
 
   return (
     <form className="messageForm" onSubmit={updateMessageList}>

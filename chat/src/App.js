@@ -1,46 +1,34 @@
-import { useState } from "react";
-import Message from "./components/Message/Message";
-import MessageForm from "./components/MessageForm/MessageForm";
+import Home from "./components/Home/Home";
+import Chats from "./components/Chats/Chats";
+import { BrowserRouter, Link, Routes, Route } from "react-router-dom";
+import ChatList from "./components/ChatList/ChatList";
 
 function App() {
-  const [messageList, setMessageList] = useState([]);
-  const chatList = [
-    {
-      chatName: "Chat 1",
-      id: "Chat 1",
-    },
-    {
-      chatName: "Chat 2",
-      id: "Chat 2",
-    },
-    {
-      chatName: "Chat 3",
-      id: "Chat 3",
-    },
-  ];
-
   return (
-    <div className="App">
-      <div className="chatListBox">
-        Chat List
-        <ul className="chatList">
-          {chatList.map((item) => {
-            return (
-              <li key={item.id} className="chatListEl">
-                {item.chatName}
-              </li>
-            );
-          })}
+    <BrowserRouter>
+      <nav>
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/profile">Profile</Link>
+          </li>
+          <li>
+            <Link to="/chat">Chats</Link>
+          </li>
         </ul>
-      </div>
-      <div className="chatArea">
-        <Message messageList={messageList} />
-        <MessageForm
-          messageList={messageList}
-          setMessageList={setMessageList}
-        />
-      </div>
-    </div>
+      </nav>
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/profile" element={<div>Profile</div>} />
+        <Route path="/chat">
+          <Route index element={<ChatList />} />
+          <Route path=":chatId" element={<Chats />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
